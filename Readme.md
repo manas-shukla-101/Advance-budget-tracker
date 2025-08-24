@@ -220,7 +220,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ![Dashboard](https://via.placeholder.com/600x400/3b82f6/ffffff?text=Dashboard+View)
 
 ### Transaction Management
-![Transactions](https://via.placeholder.com/600x400/10b981/ffffff?text=Transaction+Management)
+![Transactions]
+(https://github.com/manas-shukla-101/Advance-budget-tracker/blob/173a42b0d133ffa634d03122d922530f9aa2e3bd/Screenshot_20250824-143614%20(1).png)
 
 ### Analytics & Charts
 ![Analytics](https://via.placeholder.com/600x400/8b5cf6/ffffff?text=Analytics+Charts)
