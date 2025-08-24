@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Budget Tracker Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'heading': ['Montserrat', 'sans-serif'],
+                        'body': ['Open Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0891b2',
+                        accent: '#84cc16',
+                        neutral: {
+                            50: '#f9fafb',
+                            600: '#4b5563',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-neutral-50 min-h-screen font-body">
+    <!-- Authentication Overlay -->
+    <div id="authOverlay" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4 border border-gray-100">
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-heading font-black text-gray-900 mb-2">Welcome Back</h2>
+                    <p class="text-neutral-600">Sign in to your financial dashboard</p>
+                </div>
+                
+                <form id="loginFormElement" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200" required>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-primary to-cyan-600 text-white py-3 px-6 rounded-xl hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 font-semibold">
+                        Sign In to Dashboard
+                    </button>
+                </form>
+                <p class="text-center text-sm text-neutral-600 mt-6">
+                    Don't have an account? 
+                    <button id="showRegister" class="text-primary hover:text-cyan-700 font-semibold transition-colors">Create Account</button>
+                </p>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="auth-form hidden">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-accent to-green-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-heading font-black text-gray-900 mb-2">Join Today</h2>
+                    <p class="text-neutral-600">Start your financial journey</p>
+                </div>
+                
+                <!-- Added helpful registration tips -->
+                <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h4 class="text-sm font-semibold text-green-800">Registration Tips</h4>
+                    </div>
+                    <div class="text-xs text-green-700 space-y-1">
+                        <p>• Password must be at least 6 characters</p>
+                        <p>• Use a valid email format</p>
+                        <p>• All data is stored locally in your browser</p>
+                    </div>
+                </div>
+                
+                <form id="registerFormElement" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                        <input type="text" id="registerName" placeholder="Enter your full name" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                        <input type="email" id="registerEmail" placeholder="Enter your email" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                        <input type="password" id="registerPassword" placeholder="Create a password" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200" required>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-accent to-green-500 text-white py-3 px-6 rounded-xl hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 font-semibold">
+                        Create Your Account
+                    </button>
+                </form>
+                <p class="text-center text-sm text-neutral-600 mt-6">
+                    Already have an account? 
+                    <button id="showLogin" class="text-primary hover:text-cyan-700 font-semibold transition-colors">Sign In</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-40 backdrop-blur-sm bg-white/95">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-heading font-black text-gray-900">Budget Tracker</h1>
+                        <p class="text-xs text-neutral-600 font-medium">Professional Edition</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <!-- Added currency selector before user info -->
+                    <div class="flex items-center gap-2 bg-neutral-50 rounded-xl px-3 py-2">
+                        <svg class="w-4 h-4 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2-3-.895-3 2 1.343-2 3 2-3 .895 3 2-1.343 2-3 2"></path>
+                        </svg>
+                        <select id="currencySelector" class="bg-transparent text-sm font-medium text-gray-700 border-none outline-none cursor-pointer">
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="JPY">JPY (¥)</option>
+                            <option value="CAD">CAD (C$)</option>
+                            <option value="AUD">AUD (A$)</option>
+                            <option value="CHF">CHF (Fr)</option>
+                            <option value="CNY">CNY (¥)</option>
+                            <option value="INR">INR (₹)</option>
+                            <option value="KRW">KRW (₩)</option>
+                            <option value="BRL">BRL (R$)</option>
+                            <option value="MXN">MXN ($)</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-3 bg-neutral-50 rounded-xl px-4 py-2">
+                        <div class="bg-gradient-to-br from-primary to-accent p-2 rounded-lg">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <span id="userName" class="text-sm font-semibold text-gray-900">User</span>
+                            <p class="text-xs text-neutral-600">Premium Member</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="exportBtn" class="bg-primary text-white px-4 py-2 rounded-xl hover:bg-cyan-700 transition-all duration-200 font-medium shadow-sm hover:shadow-md">
+                            Export CSV
+                        </button>
+                        <button id="clearBtn" class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 transition-all duration-200 font-medium shadow-sm hover:shadow-md">
+                            Clear Data
+                        </button>
+                        <button id="logoutBtn" class="bg-neutral-600 text-white px-4 py-2 rounded-xl hover:bg-neutral-700 transition-all duration-200 font-medium shadow-sm hover:shadow-md">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-neutral-600 uppercase tracking-wide">Total Income</p>
+                        <p id="totalIncome" class="text-3xl font-heading font-black text-green-600 mt-1">$0.00</p>
+                        <p id="incomeChange" class="text-xs text-green-500 font-medium mt-1">+0% from last month</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-100 to-green-200 p-4 rounded-2xl">
+                        <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-neutral-600 uppercase tracking-wide">Total Expenses</p>
+                        <p id="totalExpenses" class="text-3xl font-heading font-black text-red-600 mt-1">$0.00</p>
+                        <p id="expenseChange" class="text-xs text-red-500 font-medium mt-1">+0% from last month</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-red-100 to-red-200 p-4 rounded-2xl">
+                        <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-neutral-600 uppercase tracking-wide">Net Balance</p>
+                        <p id="netBalance" class="text-3xl font-heading font-black text-primary mt-1">$0.00</p>
+                        <p id="balanceStatus" class="text-xs text-primary font-medium mt-1">Healthy Balance</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-100 to-cyan-200 p-4 rounded-2xl">
+                        <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-neutral-600 uppercase tracking-wide">Budget Used</p>
+                        <p id="budgetUsed" class="text-3xl font-heading font-black text-purple-600 mt-1">0%</p>
+                        <p id="budgetStatus" class="text-xs text-purple-500 font-medium mt-1">On Track</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-100 to-purple-200 p-4 rounded-2xl">
+                        <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-heading font-bold text-gray-900">Financial Goals</h2>
+                <button id="addGoalBtn" class="bg-accent text-white px-4 py-2 rounded-xl hover:bg-green-600 transition-all duration-200 font-medium">
+                    Add Goal
+                </button>
+            </div>
+            <div id="financialGoals" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Goals will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 mb-6">
+                    <h2 class="text-xl font-heading font-bold text-gray-900 mb-6">Add Transaction</h2>
+                    <form id="transactionForm" class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Type</label>
+                            <select id="type" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200">
+                                <option value="income">💰 Income</option>
+                                <option value="expense">💸 Expense</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Amount</label>
+                            <div class="relative">
+                                <!-- Updated currency symbol to be dynamic -->
+                                <span id="amountCurrencySymbol" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">$</span>
+                                <input type="number" id="amount" step="0.01" placeholder="0.00" class="w-full border-2 border-gray-200 rounded-xl pl-8 pr-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+                            <select id="category" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200">
+                                <option value="food">🍽️ Food & Dining</option>
+                                <option value="transport">🚗 Transportation</option>
+                                <option value="shopping">🛍️ Shopping</option>
+                                <option value="entertainment">🎬 Entertainment</option>
+                                <option value="bills">📄 Bills & Utilities</option>
+                                <option value="healthcare">🏥 Healthcare</option>
+                                <option value="salary">💼 Salary</option>
+                                <option value="freelance">💻 Freelance</option>
+                                <option value="investment">📈 Investment</option>
+                                <option value="other">📦 Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                            <input type="text" id="description" placeholder="What was this for?" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Date</label>
+                            <input type="date" id="date" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200" required>
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-primary to-cyan-600 text-white py-3 px-6 rounded-xl hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 font-semibold">
+                            Add Transaction
+                        </button>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
+                    <h2 class="text-xl font-heading font-bold text-gray-900 mb-6">Monthly Budget</h2>
+                    <form id="budgetForm" class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Budget Amount</label>
+                            <div class="relative">
+                                <!-- Updated budget currency symbol to be dynamic -->
+                                <span id="budgetCurrencySymbol" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">$</span>
+                                <input type="number" id="budgetAmount" step="0.01" placeholder="0.00" class="w-full border-2 border-gray-200 rounded-xl pl-8 pr-4 py-3 focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-accent to-green-500 text-white py-3 px-6 rounded-xl hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 font-semibold">
+                            Set Budget
+                        </button>
+                    </form>
+                    <div id="budgetProgress" class="mt-6 hidden">
+                        <div class="flex justify-between text-sm font-semibold text-gray-700 mb-3">
+                            <span>Budget Progress</span>
+                            <span id="budgetPercentage">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                            <div id="budgetBar" class="bg-gradient-to-r from-primary to-cyan-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <div class="flex justify-between text-sm text-neutral-600 mt-3">
+                            <span id="budgetSpent">$0.00 spent</span>
+                            <span id="budgetRemaining">$0.00 remaining</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-heading font-bold text-gray-900">Financial Trends</h2>
+                        <div class="flex gap-2">
+                            <button id="chartPeriod7" class="px-3 py-1 text-sm font-medium text-primary bg-blue-50 rounded-lg">7D</button>
+                            <button id="chartPeriod30" class="px-3 py-1 text-sm font-medium text-neutral-600 hover:text-primary rounded-lg">30D</button>
+                            <button id="chartPeriod90" class="px-3 py-1 text-sm font-medium text-neutral-600 hover:text-primary rounded-lg">90D</button>
+                        </div>
+                    </div>
+                    <div class="relative h-80">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
+                    <h2 class="text-xl font-heading font-bold text-gray-900 mb-6">Expense Categories</h2>
+                    <div id="categoryBreakdown" class="space-y-4">
+                        <!-- Categories will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-heading font-bold text-gray-900">Recent Transactions</h2>
+                        <button id="viewAllTransactions" class="text-primary hover:text-cyan-700 font-medium text-sm">View All</button>
+                    </div>
+                    <div id="transactionsList" class="space-y-3">
+                        <!-- Transactions will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="notification" class="fixed top-4 right-4 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-4 rounded-2xl shadow-2xl transform translate-x-full transition-all duration-300 z-50 border border-green-400">
+        <div class="flex items-center gap-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span id="notificationText" class="font-medium">Transaction added successfully!</span>
+        </div>
+    </div>
+
+    <div id="goalModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
+            <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6">Add Financial Goal</h3>
+            <form id="goalForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Goal Name</label>
+                    <input type="text" id="goalName" placeholder="e.g., Emergency Fund" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Target Amount</label>
+                    <div class="relative">
+                        <!-- Updated goal currency symbol to be dynamic -->
+                        <span id="goalCurrencySymbol" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">$</span>
+                        <input type="number" id="goalAmount" step="0.01" placeholder="0.00" class="w-full border-2 border-gray-200 rounded-xl pl-8 pr-4 py-3 focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Target Date</label>
+                    <input type="date" id="goalDate" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200" required>
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" id="cancelGoal" class="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-xl hover:bg-gray-300 transition-all duration-200 font-medium">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-accent to-green-500 text-white py-3 px-6 rounded-xl hover:shadow-lg transition-all duration-200 font-semibold">
+                        Add Goal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
