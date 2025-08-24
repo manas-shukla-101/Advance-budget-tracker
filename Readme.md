@@ -2,7 +2,7 @@
 
 A comprehensive, feature-rich budget tracking application built with modern web technologies. Track your income, expenses, set financial goals, and gain insights into your spending patterns with beautiful visualizations and an intuitive user interface.
 
-![Budget Tracker Preview](https://via.placeholder.com/800x400/1e40af/ffffff?text=Advanced+Budget+Tracker)
+![Budget Tracker Preview](https://github.com/manas-shukla-101/Advance-budget-tracker/blob/586f94fb33efd801ef4376a0959b176020731f77/Screenshot_20250824-143434.png)
 
 ## ✨ Features
 
