@@ -217,16 +217,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📱 Screenshots
 
 ### Dashboard View
-![Dashboard](https://via.placeholder.com/600x400/3b82f6/ffffff?text=Dashboard+View)
+![Dashboard](https://github.com/manas-shukla-101/Advance-budget-tracker/blob/3b011b42b43add200d007f2e65d1b3508e4a10a3/Screenshot_20250824-144023.png)
 
 ### Transaction Management
-![Transactions](https://github.com/manas-shukla-101/Advance-budget-tracker/blob/586f94fb33efd801ef4376a0959b176020731f77/Screenshot_20250824-143434.png)
+![Transactions](https://github.com/manas-shukla-101/Advance-budget-tracker/blob/3b011b42b43add200d007f2e65d1b3508e4a10a3/Screenshot_20250824-143614%20(1).png)
 
 ### Analytics & Charts
-![Analytics](https://via.placeholder.com/600x400/8b5cf6/ffffff?text=Analytics+Charts)
+![Analytics](https://github.com/manas-shukla-101/Advance-budget-tracker/blob/3b011b42b43add200d007f2e65d1b3508e4a10a3/Screenshot_20250824-143733%20(1).png)
 
 ### Goal Tracking
-![Goals](https://via.placeholder.com/600x400/f59e0b/ffffff?text=Goal+Tracking)
+![Goals](https://github.com/manas-shukla-101/Advance-budget-tracker/blob/3b011b42b43add200d007f2e65d1b3508e4a10a3/Screenshot_20250824-143614%20(2).png)
 
 ---
 
