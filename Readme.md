@@ -230,6 +230,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ using modern web technologies**
+**Built with ❤️ using modern web technologies(HTML,CSS,JS)**
 
-*Last Updated: January 2024*
+*Last Updated: August 2025*
